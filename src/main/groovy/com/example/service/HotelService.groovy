@@ -51,9 +51,9 @@ class HotelService {
         } finally {
             if (cis != null) cis.close()
         }
-        def aa = new PaginationResult(nextStart: nextStart,hotels:result )
+        def rsp = new PaginationResult(nextStart: nextStart,hotels:result )
 
-        return new JsonBuilder(aa).toPrettyString()
+        return new JsonBuilder(rsp).toPrettyString()
     }
 
     static class PaginationResult{
