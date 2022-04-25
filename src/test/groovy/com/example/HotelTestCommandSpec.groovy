@@ -102,7 +102,25 @@ class HotelTestCommandSpec extends Specification {
         mapper.nextStart > start
     }
 
+    void "Verify Will Return Null When Theres No Data Return"() {
+        given:
+        ByteArrayOutputStream baos = new ByteArrayOutputStream()
+        System.setOut(new PrintStream(baos))
+
+        int start = 150
+        int limit = 2
+
+        String[] args = [start,limit] as String[]
+        PicocliRunner.run(HotelTestCommand, ctx, args)
+
+        expect:
+        def mapper = mappingData(baos.toString())
+        mapper.hotels == null
+    }
+
     PaginationResult mappingData(String json){
         return mapper.readValue(json, PaginationResult)
     }
+
+
 }

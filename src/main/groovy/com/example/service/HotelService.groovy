@@ -19,7 +19,7 @@ class HotelService {
 
     static final DESC = "desc"
 
-    String getPagination(@NotNull Integer start,
+    Single<String> getPagination(@NotNull Integer start,
                                            @NotNull Integer limit,
                                            @Nullable String sort ) {
         ClassLoader classloader = Thread.currentThread().getContextClassLoader()
@@ -47,13 +47,13 @@ class HotelService {
                     .limit(limit)
                     .collect(Collectors.toList())
 
-            nextStart = result.last()?.availableRooms
+            nextStart = result ? result.last()?.availableRooms : 0
         } finally {
             if (cis != null) cis.close()
         }
-        def rsp = new PaginationResult(nextStart: nextStart,hotels:result )
+        def rsp = new PaginationResult(nextStart: nextStart,hotels:result ? result : null)
 
-        return new JsonBuilder(rsp).toPrettyString()
+        Single.just(new JsonBuilder(rsp).toPrettyString())
     }
 
     static class PaginationResult{
